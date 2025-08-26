@@ -200,5 +200,5 @@
 }
 
 .body-overlay {
-  @apply bg-blue-800 opacity-10 fixed top-0 right-0 w-full h-screen -z-40;
+  @apply bg-blue-300 opacity-10 fixed top-0 right-0 w-full h-screen -z-40;
 }

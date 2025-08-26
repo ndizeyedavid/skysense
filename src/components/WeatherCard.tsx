@@ -13,6 +13,8 @@ function renderIcon(icon: string) {
       return <Waves className="size-[20px] opacity-30" />;
     case "cloud":
       return <Cloud className="size-[20px] opacity-30" />;
+    case "humidity":
+      return <Waves className="size-[20px] opacity-80 text-blue-600" />;
     default:
       return <SunDim className="size-[20px] opacity-30" />;
   }

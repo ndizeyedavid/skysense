@@ -2,10 +2,11 @@ import { Card, CardContent } from "./ui/card";
 
 export default function CurrentMapView() {
   return (
-    <Card>
-      <CardContent>
-        <span className="text-muted">Map will be here</span>
-      </CardContent>
-    </Card>
+    <Card
+      style={{
+        backgroundImage: "url('/assets/sample.png')",
+        backgroundSize: "cover",
+      }}
+    ></Card>
   );
 }

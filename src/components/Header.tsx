@@ -14,7 +14,7 @@ export default function Header() {
       {/* Profile */}
       <div>
         <Avatar className="border">
-          <AvatarImage src="/vite.svg" />
+          <AvatarImage src="" />
           <AvatarFallback>AD</AvatarFallback>
         </Avatar>
       </div>
