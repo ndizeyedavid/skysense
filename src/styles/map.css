@@ -1,0 +1,22 @@
+.weather-marker {
+  cursor: pointer;
+}
+
+.weather-marker .marker-icon {
+  transition: transform 0.2s;
+}
+
+.weather-marker:hover .marker-icon {
+  transform: scale(1.1);
+}
+
+.weather-popup {
+  text-align: center;
+  border-radius: 8px;
+}
+
+.weather-popup .maplibregl-popup-content {
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

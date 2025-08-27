@@ -42,7 +42,13 @@ export default function WeatherCard({
       </CardHeader>
 
       <CardFooter className="block">
-        <h3 className={`text-[${desc == "" ? "40px" : "30px"}]`}>{value}</h3>
+        <h3
+          style={{
+            fontSize: `${desc == "" ? "40px" : "30px"}`,
+          }}
+        >
+          {value}
+        </h3>
         <span className="text-xs text-gray-400">{desc}</span>
       </CardFooter>
     </Card>
