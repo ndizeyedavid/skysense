@@ -46,7 +46,8 @@ export default function MapCurrent() {
     const map = new maplibregl.Map({
       container: mapContainer.current,
       style:
-        "https://api.maptiler.com/maps/openstreetmap/style.json?key=1zVCS1twWhXWEldJnAck",
+        "https://api.maptiler.com/maps/openstreetmap/style.json?key=" +
+        import.meta.env.VITE_BASIC_MAP,
       center: [29.9189, -2.0903],
       zoom: 6.7,
     });
