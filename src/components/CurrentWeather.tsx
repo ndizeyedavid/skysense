@@ -1,41 +1,81 @@
-import { Cloud, CloudSun } from "lucide-react";
+import { CloudSun } from "lucide-react";
 import { Card, CardContent } from "./ui/card";
+import { weatherService } from "@/services/weather/weatherService";
+import { useEffect, useState } from "react";
+import type { WeatherData } from "@/services/weather/types";
 
 export default function CurrentWeather() {
+  const [currentWeather, setCurrentWeather] = useState<
+    WeatherData["current"] | null
+  >(null);
+  const [dailyForecast, setDailyForecast] = useState<
+    WeatherData["daily"] | null
+  >(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const current = await weatherService.getCurrentWeather();
+      const daily = await weatherService.getDailyForecast();
+      setCurrentWeather(current);
+      setDailyForecast(daily);
+    };
+    fetchData();
+  }, []);
+
+  if (!currentWeather || !dailyForecast) return null;
+
   return (
     <Card>
       <CardContent className="grid grid-cols-3 gap-24">
         <div className="space-y-2">
-          <h3 className="text-[50px]">27°C</h3>
+          <h3 className="text-[50px]">{currentWeather.temperature_2m}°C</h3>
           {/* aux text */}
           <div className="space-y-2 text-gray-400 text-sm">
             <p>
-              Feels Like: <span className="text-black font-bold">28°</span>
+              Humidity:{" "}
+              <span className="text-black font-bold">
+                {currentWeather.relative_humidity_2m}%
+              </span>
             </p>
             <p>
-              Temp. 24h change:{" "}
-              <span className="text-black font-bold">-2°</span>
+              Wind Speed:{" "}
+              <span className="text-black font-bold">
+                {currentWeather.wind_speed_10m} km/h
+              </span>
             </p>
             <p>
-              Rain Probability <span className="text-black font-bold">0%</span>
+              Rain:{" "}
+              <span className="text-black font-bold">
+                {currentWeather.rain} mm
+              </span>
             </p>
           </div>
         </div>
 
         <div className="mt-[50px] space-y-2">
           {/* Day status */}
-          <h3 className="text-sm font-medium">Cloudy</h3>
+          <h3 className="text-sm font-medium">
+            {currentWeather.cloud_cover > 50 ? "Cloudy" : "Clear"}
+          </h3>
           {/* aux text */}
           <div className="space-y-2 text-gray-400 text-sm">
             <p>
-              High: <span className="text-black font-bold">38°</span>, Low:{" "}
-              <span className="text-black font-bold">28°</span>
+              High:{" "}
+              <span className="text-black font-bold">
+                {dailyForecast.temperature_2m_max[0]}°
+              </span>
             </p>
             <p>
-              QPF: <span className="text-black font-bold">0.4mm</span>
+              Pressure:{" "}
+              <span className="text-black font-bold">
+                {currentWeather.surface_pressure} hPa
+              </span>
             </p>
             <p>
-              None Probability <span className="text-black font-bold">5%</span>
+              Cloud Cover:{" "}
+              <span className="text-black font-bold">
+                {currentWeather.cloud_cover}%
+              </span>
             </p>
           </div>
         </div>

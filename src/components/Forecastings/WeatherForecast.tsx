@@ -1,20 +1,31 @@
 import type { IweatherForecast } from "@/types/weatherForecast";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+import { weatherService } from "@/services/weather/weatherService";
+import { useEffect, useState } from "react";
+import type { WeatherData } from "@/services/weather/types";
 
 export default function WeatherForecast({ title }: IweatherForecast) {
-  // Mock data generation
-  const today = new Date();
-  const mockData = Array.from({ length: 10 }, (_, i) => {
-    const time = new Date(today);
-    time.setHours(time.getHours() + i);
-    return [
-      time.getTime(),
-      Math.round((Math.random() * 5 + 15) * 10) / 10, // Random temps between 15-20°C
-    ];
-  });
+  const [hourlyData, setHourlyData] = useState<WeatherData["hourly"] | null>(
+    null
+  );
 
-  const currentTime = today.getTime() - today.getTimezoneOffset() * 60 * 1000;
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await weatherService.getHourlyForecast();
+      setHourlyData(data);
+    };
+    fetchData();
+  }, []);
+
+  if (!hourlyData) return null;
+
+  const forecastData = hourlyData.time.map((time, index) => [
+    new Date(time).getTime(),
+    hourlyData.temperature_2m[index],
+  ]);
+
+  const currentTime = new Date().getTime();
 
   const options = {
     title: {
@@ -57,7 +68,7 @@ export default function WeatherForecast({ title }: IweatherForecast) {
     series: [
       {
         name: "Temperature",
-        data: mockData,
+        data: forecastData,
         zoneAxis: "x",
         lineWidth: 4,
         marker: {

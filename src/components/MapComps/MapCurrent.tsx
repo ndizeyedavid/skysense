@@ -1,7 +1,8 @@
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { useEffect, useRef } from "react";
 
+import { weatherService } from "@/services/weather/weatherService";
+import { useEffect, useRef } from "react";
 // Mock weather data
 const weatherLocations = [
   { lng: 29.991, lat: -2.0903, temp: 20, condition: "sunny" },
@@ -9,7 +10,6 @@ const weatherLocations = [
   { lng: 29.791, lat: -2.2903, temp: 22, condition: "cloudy" },
   // Add more locations as needed
 ];
-
 // @ts-ignore
 const createWeatherMarkerElement = (temp: number, condition: string) => {
   const el = document.createElement("div");
