@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 
@@ -6,9 +7,15 @@ export default function Header() {
     <div className="flex items-center justify-between mb-5">
       {/* links */}
       <div className="flex items-center gap-3">
-        <Button variant="outline">Today</Button>
-        <Button variant="outline">Forecast</Button>
-        <Button variant="outline">History</Button>
+        <NavLink to="/">
+          <Button variant="outline">Today</Button>
+        </NavLink>
+        <NavLink to="/forecast">
+          <Button variant="outline">Forecast</Button>
+        </NavLink>
+        <NavLink to="/map">
+          <Button variant="outline">Map</Button>
+        </NavLink>
       </div>
 
       {/* Profile */}

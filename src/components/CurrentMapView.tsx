@@ -7,6 +7,7 @@ export default function CurrentMapView() {
         backgroundImage: "url('/assets/sample.png')",
         backgroundSize: "cover",
       }}
+      className="h-[230px]"
     ></Card>
   );
 }
