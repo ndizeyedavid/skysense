@@ -1,4 +1,4 @@
-import CircularProgress from "@/components/CircularProgress";
+import CircularProgressBar from "@/components/CircularProgressBar";
 import CurrentMapView from "@/components/CurrentMapView";
 import CurrentWeather from "@/components/CurrentWeather";
 import Header from "@/components/Header";
@@ -125,18 +125,10 @@ export default function TodayPage() {
           </CardHeader>
 
           <CardContent className="flex items-center justify-center">
-            <CircularProgress
-              value={20}
-              size={140}
-              strokeWidth={10}
-              showLabel
-              labelClassName="text-xl font-bold"
-              shape="round"
-              form="red"
-            />
+            <CircularProgressBar progress={75} />
           </CardContent>
 
-          <CardFooter className="flex items-center justify-center w-full">
+          <CardFooter className="flex h-full items-end justify-center w-full">
             <span className="text-xs text-gray-600 text-center">
               The intensity of the ultraviolet radiation from the sun.
             </span>
@@ -152,18 +144,10 @@ export default function TodayPage() {
           </CardHeader>
 
           <CardContent className="flex items-center justify-center">
-            <CircularProgress
-              value={40}
-              size={140}
-              strokeWidth={10}
-              showLabel
-              labelClassName="text-xl font-bold"
-              shape="round"
-              form="blue"
-            />
+            <CircularProgressBar progress={35} text="1016" />
           </CardContent>
 
-          <CardFooter className="flex p-0 gap-2 flex-col items-center justify-center w-full">
+          <CardFooter className="flex gap-2 flex-col items-center justify-center w-full">
             <h3 className="text-xl text-gray-600">hPa</h3>
             <span className="text-xs text-gray-600 text-center">
               Mean Sea Level Millibars

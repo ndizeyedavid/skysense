@@ -1,4 +1,4 @@
-import { Card, CardContent } from "./ui/card";
+import { Card } from "./ui/card";
 
 export default function CurrentMapView() {
   return (
