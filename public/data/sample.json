@@ -1,0 +1,91 @@
+{
+  "latitude": -1.875,
+  "longitude": 30.125,
+  "generationtime_ms": 0.7303953170776367,
+  "utc_offset_seconds": 10800,
+  "timezone": "Africa/Cairo",
+  "timezone_abbreviation": "GMT+3",
+  "elevation": 1578.0,
+  "current_units": {
+    "time": "iso8601",
+    "interval": "seconds",
+    "temperature_2m": "°C",
+    "relative_humidity_2m": "%",
+    "is_day": "",
+    "precipitation": "mm",
+    "rain": "mm",
+    "cloud_cover": "%",
+    "surface_pressure": "hPa",
+    "wind_speed_10m": "km/h",
+    "wind_direction_10m": "°",
+    "wind_gusts_10m": "km/h",
+    "apparent_temperature": "°C",
+    "pressure_msl": "hPa"
+  },
+  "current": {
+    "time": "2025-08-29T08:30",
+    "interval": 900,
+    "temperature_2m": 16.7,
+    "relative_humidity_2m": 71,
+    "is_day": 1,
+    "precipitation": 0.0,
+    "rain": 0.0,
+    "cloud_cover": 0,
+    "surface_pressure": 847.8,
+    "wind_speed_10m": 6.5,
+    "wind_direction_10m": 341,
+    "wind_gusts_10m": 23.0,
+    "apparent_temperature": 16.2,
+    "pressure_msl": 1017.8
+  },
+  "daily_units": {
+    "time": "iso8601",
+    "temperature_2m_max": "°C",
+    "sunrise": "iso8601",
+    "sunset": "iso8601",
+    "uv_index_max": "",
+    "rain_sum": "mm",
+    "precipitation_sum": "mm",
+    "wind_speed_10m_max": "km/h",
+    "temperature_2m_min": "°C",
+    "uv_index_clear_sky_max": "",
+    "precipitation_probability_max": "%"
+  },
+  "daily": {
+    "time": [
+      "2025-08-29",
+      "2025-08-30",
+      "2025-08-31",
+      "2025-09-01",
+      "2025-09-02",
+      "2025-09-03",
+      "2025-09-04"
+    ],
+    "temperature_2m_max": [26.5, 25.1, 24.9, 25.8, 26.4, 25.6, 26.9],
+    "sunrise": [
+      "2025-08-29T06:58",
+      "2025-08-30T06:57",
+      "2025-08-31T06:57",
+      "2025-09-01T06:57",
+      "2025-09-02T06:56",
+      "2025-09-03T06:56",
+      "2025-09-04T06:56"
+    ],
+    "sunset": [
+      "2025-08-29T19:02",
+      "2025-08-30T19:02",
+      "2025-08-31T19:01",
+      "2025-09-01T19:01",
+      "2025-09-02T19:01",
+      "2025-09-03T19:01",
+      "2025-09-04T19:00"
+    ],
+    "uv_index_max": [9.3, 9.3, 9.35, 9.35, 9.35, 9.1, 9.1],
+    "rain_sum": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+    "precipitation_sum": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+    "wind_speed_10m_max": [20.2, 18.7, 19.0, 21.3, 20.6, 20.5, 20.8],
+    "temperature_2m_min": [13.5, 13.7, 14.0, 14.8, 14.3, 14.4, 14.2],
+    "uv_index_clear_sky_max": [9.3, 9.3, 9.35, 9.35, 9.35, 9.1, 9.1],
+    "precipitation_probability_max": [0, 0, 0, 0, 0, 0, 0]
+  }
+}

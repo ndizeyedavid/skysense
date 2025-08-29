@@ -14,19 +14,35 @@ export default function ForeCastingMetrics() {
 
       <CardContent className="space-y-3">
         <div className="grid grid-cols-8 gap-3">
-          <ForecastDay />
-          <ForecastDay />
-          <ForecastDay />
-          <ForecastDay />
-          <ForecastDay />
-          <ForecastDay />
-          <ForecastDay />
-          <ForecastDay />
+          <ForecastDay day="Today" date="29-8" status="sunny" temp={30} />
+          <ForecastDay day="Fri" date="30-8" status="sunny" temp={27} />
+          <ForecastDay day="Sat" date="31-8" status="cloudy" temp={28} />
+          <ForecastDay day="Sun" date="01-9" status="rainy" temp={25} />
+          <ForecastDay day="Mon" date="02-9" status="cloudy" temp={27} />
+          <ForecastDay day="Mon" date="02-9" status="cloudy" temp={27} />
+          <ForecastDay day="Mon" date="02-9" status="cloudy" temp={27} />
+          <ForecastDay day="Mon" date="02-9" status="cloudy" temp={27} />
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <DayForecast />
-          <DayForecast />
+          <DayForecast
+            title="Daytime Forecast"
+            status="Cloudy"
+            rainPercent={10}
+            raintMM={0.0}
+            visibility={21}
+            cloudCoverage={100}
+            UV={8}
+          />
+          <DayForecast
+            title="Nighttime Forecast"
+            status="Partly cloudy"
+            rainPercent={40}
+            raintMM={1.0}
+            visibility={33}
+            cloudCoverage={100}
+            UV={0}
+          />
         </div>
 
         <div className="grid grid-cols-2 gap-3">
