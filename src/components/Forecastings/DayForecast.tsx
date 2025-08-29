@@ -12,14 +12,33 @@ export default function DayForecast({
   UV,
 }: IDayForecast) {
   return (
-    <Card className="bg-[#669df6] text-white">
+    <Card className="bg-blue-700 text-white">
       <CardTitle>
         <h5 className="px-4 text-xs text-white/80 font-medium">{title}:</h5>
       </CardTitle>
 
       <CardContent className="space-y-5">
-        <div className=" flex items-center gap-3 text-sm">
-          <Sun className="size-[35px] p-2 text-yellow-300 bg-blue-800/20 rounded-full" />
+        <div className="flex items-center gap-3 text-sm">
+          {(() => {
+            const WeatherIcon =
+              status.toLowerCase() === "rainy"
+                ? CloudRain
+                : status.toLowerCase() === "cloudy"
+                ? Cloud
+                : status.toLowerCase() === "partly cloudy"
+                ? CloudRain
+                : Sun;
+
+            return (
+              <WeatherIcon
+                className={`size-[35px] p-2 ${
+                  status.toLowerCase().includes("sun")
+                    ? "text-yellow-300"
+                    : "text-white"
+                } bg-blue-800/20 rounded-full`}
+              />
+            );
+          })()}
           {status}
         </div>
         {/* rain */}

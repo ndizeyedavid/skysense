@@ -2,78 +2,140 @@ import { Moon, Sunrise, ThermometerSunIcon } from "lucide-react";
 import { Card, CardContent, CardTitle } from "../ui/card";
 import DayForecast from "./DayForecast";
 import ForecastDay from "./ForecastDay";
+import { useEffect, useState } from "react";
+import { getDayForecastedData } from "@/services/weather.api";
 
 export default function ForeCastingMetrics() {
+  const [forecastData, setForecastData] = useState<any>(null);
+  const [selectedDay, setSelectedDay] = useState(0);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getDayForecastedData();
+      setForecastData(data);
+    };
+    fetchData();
+  }, []);
+
+  if (!forecastData) return null;
+
+  const getDayName = (date: Date) => {
+    return new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(date);
+  };
+
+  const formatDate = (date: Date) => {
+    return new Intl.DateTimeFormat("en-US", {
+      day: "2-digit",
+      month: "2-digit",
+    }).format(date);
+  };
+
+  const formatTime = (date: Date) => {
+    return new Intl.DateTimeFormat("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }).format(date);
+  };
+
   return (
     <Card>
       <CardTitle>
         <h6 className="px-6 text-xs text-gray-500 font-medium">
-          Daily Forecast(10 days)
+          Daily Forecast(7 days)
         </h6>
       </CardTitle>
 
       <CardContent className="space-y-3">
-        <div className="grid grid-cols-8 gap-3">
-          <ForecastDay day="Today" date="29-8" status="sunny" temp={30} />
-          <ForecastDay day="Fri" date="30-8" status="sunny" temp={27} />
-          <ForecastDay day="Sat" date="31-8" status="cloudy" temp={28} />
-          <ForecastDay day="Sun" date="01-9" status="rainy" temp={25} />
-          <ForecastDay day="Mon" date="02-9" status="cloudy" temp={27} />
-          <ForecastDay day="Mon" date="02-9" status="cloudy" temp={27} />
-          <ForecastDay day="Mon" date="02-9" status="cloudy" temp={27} />
-          <ForecastDay day="Mon" date="02-9" status="cloudy" temp={27} />
+        <div className="grid grid-cols-7 gap-3">
+          {forecastData.time.map((time: Date, index: number) => (
+            <ForecastDay
+              key={time.toISOString()}
+              day={index === 0 ? "Today" : getDayName(time)}
+              date={formatDate(time)}
+              status={
+                forecastData.precipitation_probability_max[index] > 50
+                  ? "rainy"
+                  : "sunny"
+              }
+              temp={Math.round(forecastData.temperature_2m_max[index])}
+              precipitation_probability={
+                forecastData.precipitation_probability_max[index]
+              }
+              rain_sum={forecastData.rain_sum[index]}
+              onSelect={setSelectedDay}
+              index={index}
+              selected={selectedDay === index}
+            />
+          ))}
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3">
           <DayForecast
             title="Daytime Forecast"
-            status="Cloudy"
-            rainPercent={10}
-            raintMM={0.0}
-            visibility={21}
-            cloudCoverage={100}
-            UV={8}
-          />
-          <DayForecast
-            title="Nighttime Forecast"
-            status="Partly cloudy"
-            rainPercent={40}
-            raintMM={1.0}
-            visibility={33}
-            cloudCoverage={100}
-            UV={0}
+            status={
+              forecastData.precipitation_probability_max[selectedDay] > 50
+                ? "Rainy"
+                : "Sunny"
+            }
+            rainPercent={
+              forecastData.precipitation_probability_max[selectedDay]
+            }
+            raintMM={forecastData.rain_sum[selectedDay]}
+            visibility={
+              100 -
+              (forecastData.precipitation_probability_max[selectedDay] || 0)
+            }
+            cloudCoverage={
+              forecastData.precipitation_probability_max[selectedDay] || 0
+            }
+            UV={forecastData.uv_index_clear_sky_max[selectedDay]}
           />
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          {/* max - min temps */}
-          <Card className="bg-[#669df6] text-white/80">
+          <Card className="bg-blue-700 text-white/80">
             <CardContent className="text-sm flex items-center justify-between">
               <h3>
-                Max: <span className="text-white">33°</span>
+                Max:{" "}
+                <span className="text-white">
+                  {Math.round(forecastData.temperature_2m_max[selectedDay])}°
+                </span>
               </h3>
               <h3>
-                Min: <span className="text-white">33°</span>
+                Min:{" "}
+                <span className="text-white">
+                  {Math.round(forecastData.temperature_2m_min[selectedDay])}°
+                </span>
               </h3>
               <div className="flex items-center gap-2">
-                <ThermometerSunIcon /> <span className="text-white">33°</span>
+                <ThermometerSunIcon />
+                <span className="text-white">
+                  {Math.round(
+                    (forecastData.temperature_2m_max[selectedDay] +
+                      forecastData.temperature_2m_min[selectedDay]) /
+                      2
+                  )}
+                  °
+                </span>
               </div>
             </CardContent>
           </Card>
 
-          {/* sunrise - sunset */}
-          <Card className="bg-[#669df6] text-white/80">
+          <Card className="bg-blue-700 text-white/80">
             <CardContent className="text-xs flex items-center justify-between">
               <div className="flex items-center gap-1">
-                <span className="text-white">06:07</span>-
                 <Sunrise className="size-[20px]" />-
-                <span className="text-white">19:16</span>
+                <span className="text-white">
+                  {formatTime(forecastData.sunrise[selectedDay])}
+                </span>
               </div>
 
               <div className="flex items-center gap-1">
-                <span className="text-white">09:27</span>-
                 <Moon className="size-[20px]" />-
-                <span className="text-white">20:55</span>
+                <span className="text-white">
+                  {formatTime(forecastData.sunset[selectedDay])}
+                </span>
               </div>
             </CardContent>
           </Card>
