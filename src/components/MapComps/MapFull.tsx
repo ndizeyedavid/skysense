@@ -4,9 +4,24 @@ import { useEffect, useRef } from "react";
 
 // Mock weather data
 const weatherLocations = [
-  { lng: 29.991, lat: -2.0903, temp: 20, condition: "sunny" },
-  { lng: 30.191, lat: -1.9903, temp: 18, condition: "partly-cloudy" },
-  { lng: 29.791, lat: -2.2903, temp: 22, condition: "cloudy" },
+  {
+    lng: 30.114,
+    lat: -1.939,
+    temp: 20,
+    condition: "sunny",
+  },
+  {
+    lng: 30.130167996461676,
+    lat: -1.9765821361061129,
+    temp: 18,
+    condition: "partly-cloudy",
+  },
+  {
+    lng: 30.0654759788284,
+    lat: -1.9582633318656981,
+    temp: 22,
+    condition: "sunny",
+  },
   // Add more locations as needed
 ];
 
@@ -48,8 +63,8 @@ export default function MapFull() {
       style:
         "https://api.maptiler.com/maps/satellite/style.json?key=" +
         import.meta.env.VITE_SATELLITE_MAP,
-      center: [29.9189, -2.0903],
-      zoom: 8,
+      center: [30.114, -1.959],
+      zoom: 12,
     });
 
     map.on("load", () => {

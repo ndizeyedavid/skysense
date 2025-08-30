@@ -2,11 +2,25 @@ import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef } from "react";
 
-// Mock weather data
 const weatherLocations = [
-  { lng: 29.991, lat: -2.0903, temp: 20, condition: "sunny" },
-  { lng: 30.191, lat: -1.9903, temp: 18, condition: "partly-cloudy" },
-  { lng: 29.791, lat: -2.2903, temp: 22, condition: "cloudy" },
+  {
+    lng: 30.114,
+    lat: -1.939,
+    temp: 20,
+    condition: "sunny",
+  },
+  {
+    lng: 30.130167996461676,
+    lat: -1.9765821361061129,
+    temp: 18,
+    condition: "partly-cloudy",
+  },
+  {
+    lng: 30.0654759788284,
+    lat: -1.9582633318656981,
+    temp: 22,
+    condition: "sunny",
+  },
   // Add more locations as needed
 ];
 
@@ -49,8 +63,8 @@ export default function MapCurrent() {
       style:
         "https://api.maptiler.com/maps/openstreetmap/style.json?key=" +
         import.meta.env.VITE_BASIC_MAP,
-      center: [29.9189, -2.0903],
-      zoom: 6.7,
+      center: [30.114, -1.959],
+      zoom: 11,
     });
 
     map.on("load", () => {
@@ -105,9 +119,13 @@ export default function MapCurrent() {
               className: "weather-popup",
             }).setHTML(
               `<div style="text-align: center;">
-                <strong style="font-size: ${window.innerWidth < 640 ? '14px' : '16px'};">${location.temp}°C</strong>
+                <strong style="font-size: ${
+                  window.innerWidth < 640 ? "14px" : "16px"
+                };">${location.temp}°C</strong>
                 <br/>
-                <span style="color: #666; font-size: ${window.innerWidth < 640 ? '12px' : '14px'};">${location.condition}</span>
+                <span style="color: #666; font-size: ${
+                  window.innerWidth < 640 ? "12px" : "14px"
+                };">${location.condition}</span>
               </div>`
             )
           )
