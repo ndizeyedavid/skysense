@@ -79,7 +79,7 @@ export default function CircularProgress({
       {showLabel && (
         <div
           className={cn(
-            "absolute inset-0 flex items-center justify-center text-md",
+            "absolute inset-0 flex items-center justify-center text-md text-white",
             labelClassName
           )}
         >

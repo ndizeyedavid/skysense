@@ -99,15 +99,21 @@ export default function CurrentWeather({
           <div className="space-y-2 text-gray-400 text-xs sm:text-sm">
             <p>
               Apparent Temp:{" "}
-              <span className="text-black font-bold">{apparentTemp}°</span>
+              <span className=" dark:text-white text-black font-bold">
+                {apparentTemp}°
+              </span>
             </p>
             <p>
               Precipitation:{" "}
-              <span className="text-black font-bold">{precipitation} mm</span>
+              <span className="dark:text-white text-black font-bold">
+                {precipitation} mm
+              </span>
             </p>
             <p>
               Max Precipitation{" "}
-              <span className="text-black font-bold">{maxPrecipitation} %</span>
+              <span className="dark:text-white text-black font-bold">
+                {maxPrecipitation} %
+              </span>
             </p>
           </div>
         </div>
@@ -130,11 +136,20 @@ export default function CurrentWeather({
           {/* aux text */}
           <div className="space-y-2 text-gray-400 text-xs sm:text-sm">
             <p>
-              High: <span className="text-black font-bold">{highTemp}°</span>,
-              Low: <span className="text-black font-bold">{lowTemp}°</span>
+              High:{" "}
+              <span className="dark:text-white text-black font-bold">
+                {highTemp}°
+              </span>
+              , Low:{" "}
+              <span className="dark:text-white text-black font-bold">
+                {lowTemp}°
+              </span>
             </p>
             <p>
-              Rain: <span className="text-black font-bold">{rain} mm</span>
+              Rain:{" "}
+              <span className="dark:text-white text-black font-bold">
+                {rain} mm
+              </span>
             </p>
           </div>
         </div>

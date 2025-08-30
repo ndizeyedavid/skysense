@@ -16,7 +16,6 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
   strokeWidth = 4,
   circleColor = "#e6e6e6",
   progressColor = "#2196f3",
-  textColor = "#000000",
   text = "",
 }) => {
   const radius = (size - strokeWidth) / 2;
@@ -56,7 +55,6 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
           left: "50%",
           transform: "translateX(-50%)",
           fontSize: `${size / 6}px`,
-          color: textColor,
         }}
       >
         {text == "" ? `${Math.round(progress)}%` : text}

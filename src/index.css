@@ -202,3 +202,21 @@
 .body-overlay {
   @apply bg-blue-300 opacity-10 fixed top-0 right-0 w-full h-screen -z-40;
 }
+
+/* Navigation button animations and active states */
+.nav-button-active {
+  @apply bg-primary text-primary-foreground transform scale-105 shadow-md;
+  transition: all 0.3s ease;
+}
+
+.nav-button {
+  transition: all 0.2s ease;
+}
+
+.nav-button:hover {
+  @apply transform scale-105 shadow-sm;
+}
+
+.nav-button:active {
+  @apply transform scale-95;
+}
