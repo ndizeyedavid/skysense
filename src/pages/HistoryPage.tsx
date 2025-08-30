@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/Header";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect, useState } from "react";
 import { getHistoricalWeatherData } from "@/services/weather.api";
 import Highcharts from "highcharts";
@@ -13,14 +14,19 @@ interface HistoricalData {
 }
 
 export default function HistoryPage() {
+  const [loading, setLoading] = useState(true);
   const [historicalData, setHistoricalData] = useState<HistoricalData | null>(
     null
   );
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getHistoricalWeatherData();
-      setHistoricalData(data);
+      try {
+        const data = await getHistoricalWeatherData();
+        setHistoricalData(data);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchData();
   }, []);
@@ -41,7 +47,15 @@ export default function HistoryPage() {
           </div>
 
           <div className="grid grid-cols-1 gap-4">
-            {historicalData && (
+            {loading ? (
+              <div className="space-y-4">
+                <Skeleton className="h-[400px] w-full" />
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
+                </div>
+              </div>
+            ) : historicalData && (
               <HighchartsReact
                 highcharts={Highcharts}
                 options={{

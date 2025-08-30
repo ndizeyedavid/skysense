@@ -1,6 +1,7 @@
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Mock weather data
 const weatherLocations = [
@@ -56,6 +57,7 @@ const createWeatherMarkerElement = (temp: number, condition: string) => {
 
 export default function MapFull() {
   const mapContainer: any = useRef(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const map = new maplibregl.Map({
@@ -67,7 +69,8 @@ export default function MapFull() {
       zoom: 12,
     });
 
-    map.on("load", () => {
+    map.on("load", async () => {
+      setLoading(false);
       // Add Rwanda admin boundaries
       map.addSource("rwanda-boundaries", {
         type: "geojson",
@@ -134,7 +137,11 @@ export default function MapFull() {
 
   return (
     <div className="h-full bg-muted rounded-lg flex items-center justify-center border-2 overflow-hidden border-dashed">
-      <div ref={mapContainer} className="w-full h-full" />
+      {loading ? (
+        <Skeleton className="w-full h-full" />
+      ) : (
+        <div ref={mapContainer} className="w-full h-full" />
+      )}
     </div>
   );
 }

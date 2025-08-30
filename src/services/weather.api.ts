@@ -1,13 +1,15 @@
 import axios from "axios";
 
+const baseAPI = import.meta.env.VITE_OPEN_METO_API;
+
 export async function getWeatherData() {
-  const res = await axios.get("/data/big_sample.json");
+  const res = await axios.get(baseAPI);
 
   return res;
 }
 
 export async function getCurrentWeather() {
-  const res = await axios.get("/data/sample.json");
+  const res = await axios.get(baseAPI);
 
   const currentData = res.data.current;
 
@@ -23,7 +25,7 @@ export async function getCurrentWeather() {
 }
 
 export async function getDayForecastedData() {
-  const res = await axios.get("/data/sample.json");
+  const res = await axios.get(baseAPI);
   const dailyData = res.data.daily;
 
   return {
@@ -41,7 +43,7 @@ export async function getDayForecastedData() {
 }
 
 export async function getHourlyForecastData() {
-  const res = await axios.get("/data/big_sample.json");
+  const res = await axios.get(baseAPI);
   const hourlyData = res.data.hourly;
   const currentTime =
     new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000;
@@ -68,7 +70,7 @@ export async function getHourlyForecastData() {
 }
 export async function getHistoricalWeatherData() {
   try {
-    const res = await axios.get("/data/full_data.json");
+    const res = await axios.get(baseAPI);
     const hourlyData = res.data.hourly;
 
     // Transform metrics into Highcharts format, limiting to 24 data points (one per hour)

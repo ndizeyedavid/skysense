@@ -8,6 +8,7 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import WeatherCard from "@/components/WeatherCard";
 import { getCurrentWeather } from "@/services/weather.api";
 import type { IWeatherCard } from "@/types/weatherCard";
@@ -69,131 +70,181 @@ export default function TodayPage() {
 
   return (
     <section className="px-7 py-8 space-y-5">
-      {loading && "Loading...."}
       <Header />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <CurrentWeather
-          temperature={currentWeatherData?.temperature_2m}
-          apparentTemp={currentWeatherData?.apparent_temperature}
-          precipitation={currentWeatherData?.precipitation}
-          highTemp={currentWeatherData?.temperature_2m_max}
-          lowTemp={currentWeatherData?.temperature_2m_min}
-          rain={currentWeatherData?.rain}
-          maxPrecipitation={currentWeatherData?.precipitation_probability_max}
-        />
-
-        <CurrentMapView />
+        {loading ? (
+          <>
+            <Card className="p-4">
+              <Skeleton className="h-24 w-full mb-4" />
+              <div className="space-y-3">
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-4 w-1/2" />
+              </div>
+            </Card>
+            <Card className="p-4">
+              <Skeleton className="h-[300px] w-full" />
+            </Card>
+          </>
+        ) : (
+          <>
+            <CurrentWeather
+              temperature={currentWeatherData?.temperature_2m}
+              apparentTemp={currentWeatherData?.apparent_temperature}
+              precipitation={currentWeatherData?.precipitation}
+              highTemp={currentWeatherData?.temperature_2m_max}
+              lowTemp={currentWeatherData?.temperature_2m_min}
+              rain={currentWeatherData?.rain}
+              maxPrecipitation={
+                currentWeatherData?.precipitation_probability_max
+              }
+            />
+            <CurrentMapView />
+          </>
+        )}
       </div>
 
       <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
-        {weatherData.map((data, index) => (
-          <WeatherCard key={index} {...data} />
-        ))}
+        {loading
+          ? Array(4)
+              .fill(0)
+              .map((_, index) => (
+                <Card key={index} className="p-4">
+                  <Skeleton className="h-4 w-1/2 mb-2" />
+                  <Skeleton className="h-8 w-full mb-2" />
+                  <Skeleton className="h-4 w-3/4" />
+                </Card>
+              ))
+          : weatherData.map((data, index) => (
+              <WeatherCard key={index} {...data} />
+            ))}
       </div>
 
       <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-3">
-        <Card
-          style={{
-            backgroundImage: "url('/assets/images/windDirection.png')",
-            backgroundSize: "contain",
-            backgroundPosition: "right bottom",
-            backgroundRepeat: "no-repeat",
-          }}
-        >
-          <CardHeader>
-            <Wind className="size-[20px] opacity-30" />
-            <span className="text-sm text-gray-600">Wind</span>
-          </CardHeader>
+        {loading ? (
+          Array(4)
+            .fill(0)
+            .map((_, index) => (
+              <Card key={index} className="p-4">
+                <CardHeader>
+                  <Skeleton className="h-5 w-5 mb-2" />
+                  <Skeleton className="h-4 w-24" />
+                </CardHeader>
+                <CardContent>
+                  <Skeleton className="h-[150px] w-full rounded-full" />
+                </CardContent>
+                <CardFooter>
+                  <Skeleton className="h-4 w-full" />
+                </CardFooter>
+              </Card>
+            ))
+        ) : (
+          <>
+            <Card
+              style={{
+                backgroundImage: "url('/assets/images/windDirection.png')",
+                backgroundSize: "contain",
+                backgroundPosition: "right bottom",
+                backgroundRepeat: "no-repeat",
+              }}
+            >
+              <CardHeader>
+                <Wind className="size-[20px] opacity-30" />
+                <span className="text-sm text-gray-600">Wind</span>
+              </CardHeader>
 
-          <CardFooter className="grid grid-cols-2">
-            <div className="text-xs space-y-3">
-              <div>
-                <span className="text-sm font-medium">
-                  {currentWeatherData?.wind_speed_10m} km/h
-                </span>
-                <h5 className="text-gray-600">Speed</h5>
-              </div>
+              <CardFooter className="grid grid-cols-2">
+                <div className="text-xs space-y-3">
+                  <div>
+                    <span className="text-sm font-medium">
+                      {currentWeatherData?.wind_speed_10m} km/h
+                    </span>
+                    <h5 className="text-gray-600">Speed</h5>
+                  </div>
 
-              <div>
-                <span className="text-sm font-medium">
-                  {currentWeatherData?.wind_gusts_10m} km/h
-                </span>
-                <h5 className="text-gray-600">Gust</h5>
-              </div>
-            </div>
+                  <div>
+                    <span className="text-sm font-medium">
+                      {currentWeatherData?.wind_gusts_10m} km/h
+                    </span>
+                    <h5 className="text-gray-600">Gust</h5>
+                  </div>
+                </div>
 
-            <div className="space-y-3 mt-2">
-              <Navigation2
-                className="size-[30px]"
-                fill="#d2e3fc"
-                stroke="#d2e3fc"
-                style={{
-                  transform: `rotate(${currentWeatherData?.wind_direction_10m}deg)`,
-                }}
-              />
+                <div className="space-y-3 mt-2">
+                  <Navigation2
+                    className="size-[30px]"
+                    fill="#d2e3fc"
+                    stroke="#d2e3fc"
+                    style={{
+                      transform: `rotate(${currentWeatherData?.wind_direction_10m}deg)`,
+                    }}
+                  />
 
-              <div className="text-xs">
-                <span className=" font-medium">
-                  {currentWeatherData?.wind_direction_10m}°
-                </span>
-                <h5 className="text-gray-600">Direction</h5>
-              </div>
-            </div>
-          </CardFooter>
-        </Card>
+                  <div className="text-xs">
+                    <span className=" font-medium">
+                      {currentWeatherData?.wind_direction_10m}°
+                    </span>
+                    <h5 className="text-gray-600">Direction</h5>
+                  </div>
+                </div>
+              </CardFooter>
+            </Card>
 
-        <WeatherCard
-          title="Relative Humidity"
-          value={`${currentWeatherData?.relative_humidity_2m}%`}
-          desc={`The dew point is currently ${currentWeatherData?.precipitation}°`}
-          icon="humidity"
-          background="/assets/images/humidity.png"
-        />
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-center gap-2">
-              <CloudSun className="size-[20px] text-yellow-400" />
-              <span className="text-sm text-gray-600">Overall Temperature</span>
-            </div>
-          </CardHeader>
-
-          <CardContent className="flex items-center justify-center">
-            <CircularProgressBar
-              progress={(currentWeatherData?.temperature_2m / 35) * 100}
-              text={currentWeatherData?.temperature_2m}
+            <WeatherCard
+              title="Relative Humidity"
+              value={`${currentWeatherData?.relative_humidity_2m}%`}
+              desc={`The dew point is currently ${currentWeatherData?.precipitation}°`}
+              icon="humidity"
+              background="/assets/images/humidity.png"
             />
-          </CardContent>
 
-          <CardFooter className="flex h-full items-end justify-center w-full">
-            <span className="text-xs text-gray-600 text-center">
-              The intensity of the ultraviolet radiation from the sun.
-            </span>
-          </CardFooter>
-        </Card>
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-center gap-2">
+                  <CloudSun className="size-[20px] text-yellow-400" />
+                  <span className="text-sm text-gray-600">
+                    Overall Temperature
+                  </span>
+                </div>
+              </CardHeader>
 
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-center gap-2">
-              <AlignVerticalJustifyCenterIcon className="size-[20px] opacity-40" />
-              <span className="text-sm text-gray-600">Air Pressure</span>
-            </div>
-          </CardHeader>
+              <CardContent className="flex items-center justify-center">
+                <CircularProgressBar
+                  progress={(currentWeatherData?.temperature_2m / 35) * 100}
+                  text={currentWeatherData?.temperature_2m}
+                />
+              </CardContent>
 
-          <CardContent className="flex items-center justify-center">
-            <CircularProgressBar
-              progress={(currentWeatherData?.surface_pressure / 1026) * 100}
-              text={`${currentWeatherData?.surface_pressure}`}
-            />
-          </CardContent>
+              <CardFooter className="flex h-full items-end justify-center w-full">
+                <span className="text-xs text-gray-600 text-center">
+                  The intensity of the ultraviolet radiation from the sun.
+                </span>
+              </CardFooter>
+            </Card>
 
-          <CardFooter className="flex gap-2 flex-col items-center justify-center w-full">
-            <h3 className="text-xl text-gray-600">hPa</h3>
-            <span className="text-xs text-gray-600 text-center">
-              Mean Sea Level Millibars
-            </span>
-          </CardFooter>
-        </Card>
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-center gap-2">
+                  <AlignVerticalJustifyCenterIcon className="size-[20px] opacity-40" />
+                  <span className="text-sm text-gray-600">Air Pressure</span>
+                </div>
+              </CardHeader>
+
+              <CardContent className="flex items-center justify-center">
+                <CircularProgressBar
+                  progress={(currentWeatherData?.surface_pressure / 1026) * 100}
+                  text={`${currentWeatherData?.surface_pressure}`}
+                />
+              </CardContent>
+
+              <CardFooter className="flex gap-2 flex-col items-center justify-center w-full">
+                <h3 className="text-xl text-gray-600">hPa</h3>
+                <span className="text-xs text-gray-600 text-center">
+                  Mean Sea Level Millibars
+                </span>
+              </CardFooter>
+            </Card>
+          </>
+        )}
       </div>
     </section>
   );

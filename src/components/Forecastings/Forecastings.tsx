@@ -1,4 +1,5 @@
 import { Card, CardContent, CardTitle } from "../ui/card";
+import { Skeleton } from "../ui/skeleton";
 import WeatherForecast from "./WeatherForecast";
 import { useEffect, useState } from "react";
 import { getHourlyForecastData } from "@/services/weather.api";
@@ -12,6 +13,7 @@ interface WeatherData {
 }
 
 export default function Forecastings() {
+  const [loading, setLoading] = useState(true);
   const [weatherData, setWeatherData] = useState<WeatherData>({
     temperature: [],
     humidity: [],
@@ -22,8 +24,12 @@ export default function Forecastings() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getHourlyForecastData();
-      setWeatherData(data);
+      try {
+        const data = await getHourlyForecastData();
+        setWeatherData(data);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchData();
   }, []);
@@ -36,7 +42,17 @@ export default function Forecastings() {
         </h5>
       </CardTitle>
       <CardContent className="space-y-5">
-        <WeatherForecast title="Forecasted data" weatherData={weatherData} />
+        {loading ? (
+          <div className="space-y-4">
+            <Skeleton className="h-[200px] w-full" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-3/4" />
+              <Skeleton className="h-4 w-1/2" />
+            </div>
+          </div>
+        ) : (
+          <WeatherForecast title="Forecasted data" weatherData={weatherData} />
+        )}
       </CardContent>
     </Card>
   );
