@@ -2,62 +2,52 @@ import type { IweatherForecast } from "@/types/weatherForecast";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
-export default function WeatherForecast({ title }: IweatherForecast) {
-  // Mock data generation
-  const today = new Date();
-  const mockData = Array.from({ length: 10 }, (_, i) => {
-    const time = new Date(today);
-    time.setHours(time.getHours() + i);
-    return [
-      time.getTime(),
-      Math.round((Math.random() * 5 + 15) * 10) / 10, // Random temps between 15-20°C
-    ];
-  });
+interface WeatherData {
+  temperature: [number, number][];
+  humidity: [number, number][];
+  cloudCover: [number, number][];
+  rain: [number, number][];
+  currentTime: number;
+}
 
-  const currentTime = today.getTime() - today.getTimezoneOffset() * 60 * 1000;
+interface WeatherForecastProps extends IweatherForecast {
+  weatherData: WeatherData;
+}
 
-  const options = {
-    title: {
-      text: "Hourly Temperature Forecast",
-    },
-    subtitle: {
-      text: "Dotted line indicates forecast",
-    },
+export default function WeatherForecast({ weatherData }: WeatherForecastProps) {
+  const createChartOptions = (
+    metric: string,
+    data: [number, number][],
+    unit: string,
+    color: string
+  ) => ({
+    title: { text: `${metric} Forecast` },
+    subtitle: { text: "Dotted line indicates forecast" },
     xAxis: {
       type: "datetime",
       plotLines: [
         {
           color: "#4840d6",
           width: 2,
-          value: currentTime,
+          value: weatherData.currentTime,
           zIndex: 2,
           dashStyle: "Dash",
           label: {
             text: "Current time",
             rotation: 0,
             y: 20,
-            style: {
-              color: "#333333",
-            },
+            style: { color: "#333333" },
           },
         },
       ],
     },
-    yAxis: {
-      title: {
-        text: "Temperature (°C)",
-      },
-    },
-    legend: {
-      enabled: false,
-    },
-    tooltip: {
-      valueSuffix: "°C",
-    },
+    yAxis: { title: { text: unit } },
+    legend: { enabled: false },
+    tooltip: { valueSuffix: unit },
     series: [
       {
-        name: "Temperature",
-        data: mockData,
+        name: metric,
+        data: data,
         zoneAxis: "x",
         lineWidth: 4,
         marker: {
@@ -65,31 +55,57 @@ export default function WeatherForecast({ title }: IweatherForecast) {
           lineColor: "#4840d6",
           fillColor: "#fff",
         },
-        color: {
-          linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
-          stops: [
-            [0, "#fa4fed"],
-            [1, "#5897ff"],
-          ],
-        },
-        zones: [
-          {
-            value: currentTime,
-          },
-          {
-            dashStyle: "Dot",
-          },
-        ],
+        color: color,
+        zones: [{ value: weatherData.currentTime }, { dashStyle: "Dot" }],
       },
     ],
-  };
+  });
+
+  const charts = [
+    {
+      metric: "Temperature",
+      data: weatherData.temperature,
+      unit: "°C",
+      color: "#fa4fed",
+    },
+    {
+      metric: "Humidity",
+      data: weatherData.humidity,
+      unit: "%",
+      color: "#4287f5",
+    },
+    {
+      metric: "Cloud Cover",
+      data: weatherData.cloudCover,
+      unit: "%",
+      color: "#808080",
+    },
+    {
+      metric: "Rain",
+      data: weatherData.rain,
+      unit: "mm",
+      color: "#41c9f5",
+    },
+  ];
 
   return (
-    <div className="space-y-1">
-      <h6 className="text-xs text-gray-500">{title}</h6>
-      <div className="w-full bg-white rounded-[2px]">
-        <HighchartsReact highcharts={Highcharts} options={options} />
-      </div>
+    <div className="space-y-4">
+      {charts.map((chart, index) => (
+        <div key={index} className="space-y-1">
+          <h6 className="text-xs text-gray-500">{chart.metric}</h6>
+          <div className="w-full bg-white rounded-[2px]">
+            <HighchartsReact
+              highcharts={Highcharts}
+              options={createChartOptions(
+                chart.metric,
+                chart.data,
+                chart.unit,
+                chart.color
+              )}
+            />
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

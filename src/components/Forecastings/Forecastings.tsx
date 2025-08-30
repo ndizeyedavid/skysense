@@ -1,7 +1,33 @@
 import { Card, CardContent, CardTitle } from "../ui/card";
 import WeatherForecast from "./WeatherForecast";
+import { useEffect, useState } from "react";
+import { getHourlyForecastData } from "@/services/weather.api";
+
+interface WeatherData {
+  temperature: [number, number][];
+  humidity: [number, number][];
+  cloudCover: [number, number][];
+  rain: [number, number][];
+  currentTime: number;
+}
 
 export default function Forecastings() {
+  const [weatherData, setWeatherData] = useState<WeatherData>({
+    temperature: [],
+    humidity: [],
+    cloudCover: [],
+    rain: [],
+    currentTime: 0,
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getHourlyForecastData();
+      setWeatherData(data);
+    };
+    fetchData();
+  }, []);
+
   return (
     <Card>
       <CardTitle>
@@ -10,9 +36,7 @@ export default function Forecastings() {
         </h5>
       </CardTitle>
       <CardContent className="space-y-5">
-        <WeatherForecast title="Forecasted Temperature" />
-        <WeatherForecast title="Forecasted Precipitation" />
-        <WeatherForecast title="Forecasted UV Index" />
+        <WeatherForecast title="Forecasted data" weatherData={weatherData} />
       </CardContent>
     </Card>
   );

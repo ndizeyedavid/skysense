@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export async function getWeatherData() {
-  const res = await axios.get("/data/sample.json");
+  const res = await axios.get("/data/big_sample.json");
 
   return res;
 }
@@ -36,6 +36,33 @@ export async function getDayForecastedData() {
     uv_index_clear_sky_max: dailyData.uv_index_clear_sky_max,
     temperature_2m_min: dailyData.temperature_2m_min,
     rain_sum: dailyData.rain_sum,
-    wind_speed_10m_max: dailyData.wind_speed_10m_max
+    wind_speed_10m_max: dailyData.wind_speed_10m_max,
+  };
+}
+
+export async function getHourlyForecastData() {
+  const res = await axios.get("/data/big_sample.json");
+  const hourlyData = res.data.hourly;
+  const currentTime =
+    new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000;
+
+  // Transform all metrics into Highcharts format, limiting to 7 data points
+  const transformMetric = (metric: number[]) => {
+    const step = Math.floor(hourlyData.time.length / 25);
+    return hourlyData.time
+      .filter((_: string, index: number) => index % step === 0)
+      .slice(0, 12)
+      .map((time: string, index: number) => [
+        new Date(time).getTime(),
+        metric[index * step],
+      ]);
+  };
+
+  return {
+    temperature: transformMetric(hourlyData.temperature_2m),
+    humidity: transformMetric(hourlyData.relative_humidity_2m),
+    cloudCover: transformMetric(hourlyData.cloud_cover),
+    rain: transformMetric(hourlyData.rain),
+    currentTime,
   };
 }
