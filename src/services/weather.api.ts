@@ -66,3 +66,36 @@ export async function getHourlyForecastData() {
     currentTime,
   };
 }
+export async function getHistoricalWeatherData() {
+  try {
+    const res = await axios.get("/data/full_data.json");
+    const hourlyData = res.data.hourly;
+
+    // Transform metrics into Highcharts format, limiting to 24 data points (one per hour)
+    const transformMetric = (metric: number[]) => {
+      const step = Math.floor(hourlyData.time.length / 10);
+      return hourlyData.time
+        .filter((_: string, index: number) => index % step === 0)
+        .slice(0, 10)
+        .map((time: string, index: number) => [
+          new Date(time).getTime(),
+          metric[index * step],
+        ]);
+    };
+
+    return {
+      temperature: transformMetric(hourlyData.temperature_2m),
+      humidity: transformMetric(hourlyData.relative_humidity_2m),
+      cloudCover: transformMetric(hourlyData.cloud_cover),
+      rain: transformMetric(hourlyData.rain),
+    };
+  } catch (error) {
+    console.error("Error fetching historical weather data:", error);
+    return {
+      temperature: [],
+      humidity: [],
+      cloudCover: [],
+      rain: [],
+    };
+  }
+}

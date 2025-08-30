@@ -5,12 +5,12 @@ import Header from "@/components/Header";
 
 export default function ForecastPage() {
   return (
-    <section className="px-7 py-8 space-y-5">
+    <section className="px-4 sm:px-7 py-4 sm:py-8 space-y-3 sm:space-y-5">
       <Header />
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
         <Forecastings />
 
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <CurrentMapView />
 
           <ForeCastingMetrics />

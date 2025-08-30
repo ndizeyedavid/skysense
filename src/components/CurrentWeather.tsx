@@ -5,7 +5,6 @@ import {
   CloudRain,
   CloudDrizzle,
   Snowflake,
-  CloudLightning,
 } from "lucide-react";
 import { Card, CardContent } from "./ui/card";
 import type { ICurrentWeather } from "@/types/currentWeather";
@@ -91,11 +90,13 @@ export default function CurrentWeather({
 }: ICurrentWeather) {
   return (
     <Card>
-      <CardContent className="grid grid-cols-3 gap-24">
+      <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-12 lg:gap-24">
         <div className="space-y-2">
-          <h3 className="text-[50px]">{temperature}°C</h3>
+          <h3 className="text-[32px] sm:text-[40px] lg:text-[50px]">
+            {temperature}°C
+          </h3>
           {/* aux text */}
-          <div className="space-y-2 text-gray-400 text-sm">
+          <div className="space-y-2 text-gray-400 text-xs sm:text-sm">
             <p>
               Apparent Temp:{" "}
               <span className="text-black font-bold">{apparentTemp}°</span>
@@ -111,9 +112,9 @@ export default function CurrentWeather({
           </div>
         </div>
 
-        <div className="mt-[70px] space-y-3">
+        <div className="mt-4 sm:mt-[40px] lg:mt-[70px] space-y-2 sm:space-y-3">
           {/* Day status */}
-          <h3 className="text-sm font-medium">
+          <h3 className="text-xs sm:text-sm font-medium">
             {
               getWeatherStatus({
                 temperature,
@@ -127,7 +128,7 @@ export default function CurrentWeather({
             }
           </h3>
           {/* aux text */}
-          <div className="space-y-2 text-gray-400 text-sm">
+          <div className="space-y-2 text-gray-400 text-xs sm:text-sm">
             <p>
               High: <span className="text-black font-bold">{highTemp}°</span>,
               Low: <span className="text-black font-bold">{lowTemp}°</span>
@@ -152,7 +153,8 @@ export default function CurrentWeather({
             });
             return (
               <WeatherIcon
-                className="absolute size-[100px] -right-2 -top-3"
+                className="absolute hidden size-[100px] lg:block right-0 sm:-right-2 top-0 sm:-top-3"
+                // className="absolute size-[60px] sm:size-[80px] lg:size-[100px] right-0 sm:-right-2 top-0 sm:-top-3"
                 style={{ color }}
               />
             );

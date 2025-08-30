@@ -71,7 +71,7 @@ export default function TodayPage() {
     <section className="px-7 py-8 space-y-5">
       {loading && "Loading...."}
       <Header />
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <CurrentWeather
           temperature={currentWeatherData?.temperature_2m}
           apparentTemp={currentWeatherData?.apparent_temperature}
@@ -85,13 +85,13 @@ export default function TodayPage() {
         <CurrentMapView />
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
         {weatherData.map((data, index) => (
           <WeatherCard key={index} {...data} />
         ))}
       </div>
 
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-3">
         <Card
           style={{
             backgroundImage: "url('/assets/images/windDirection.png')",

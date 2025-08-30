@@ -18,9 +18,10 @@ const createWeatherMarkerElement = (temp: number, condition: string) => {
   // Create weather icon container
   const iconContainer = document.createElement("div");
   iconContainer.className = "marker-icon";
-  iconContainer.style.width = "20px";
-  iconContainer.style.height = "20px";
-  iconContainer.style.fontSize = "12px";
+  const isMobile = window.innerWidth < 640;
+  iconContainer.style.width = isMobile ? "16px" : "20px";
+  iconContainer.style.height = isMobile ? "16px" : "20px";
+  iconContainer.style.fontSize = isMobile ? "10px" : "12px";
   iconContainer.style.backgroundColor = "#4299E1";
   iconContainer.style.borderRadius = "50%";
   iconContainer.style.display = "flex";
@@ -104,9 +105,9 @@ export default function MapCurrent() {
               className: "weather-popup",
             }).setHTML(
               `<div style="text-align: center;">
-                <strong style="font-size: 16px;">${location.temp}°C</strong>
+                <strong style="font-size: ${window.innerWidth < 640 ? '14px' : '16px'};">${location.temp}°C</strong>
                 <br/>
-                <span style="color: #666;">${location.condition}</span>
+                <span style="color: #666; font-size: ${window.innerWidth < 640 ? '12px' : '14px'};">${location.condition}</span>
               </div>`
             )
           )
@@ -118,7 +119,7 @@ export default function MapCurrent() {
   }, []);
 
   return (
-    <div className="h-full bg-muted rounded-lg flex items-center justify-center border-2 overflow-hidden border-dashed">
+    <div className="h-[300px] sm:h-full bg-muted rounded-lg flex items-center justify-center border-2 overflow-hidden border-dashed">
       <div ref={mapContainer} className="w-full h-full" />
     </div>
   );

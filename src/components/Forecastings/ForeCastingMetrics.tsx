@@ -41,13 +41,13 @@ export default function ForeCastingMetrics() {
   return (
     <Card>
       <CardTitle>
-        <h6 className="px-6 text-xs text-gray-500 font-medium">
+        <h6 className="px-3 sm:px-6 text-[10px] sm:text-xs text-gray-500 font-medium">
           Daily Forecast(7 days)
         </h6>
       </CardTitle>
 
-      <CardContent className="space-y-3">
-        <div className="grid grid-cols-7 gap-3">
+      <CardContent className="space-y-2 sm:space-y-3">
+        <div className="grid grid-cols-4 sm:grid-cols-7 gap-2 sm:gap-3">
           {forecastData.time.map((time: Date, index: number) => (
             <ForecastDay
               key={time.toISOString()}
@@ -95,7 +95,7 @@ export default function ForeCastingMetrics() {
 
         <div className="grid grid-cols-2 gap-3">
           <Card className="bg-blue-700 text-white/80">
-            <CardContent className="text-sm flex items-center justify-between">
+            <CardContent className="text-xs sm:text-sm flex flex-col sm:flex-row items-start sm:items-center justify-start sm:justify-between space-y-2 sm:space-y-0">
               <h3>
                 Max:{" "}
                 <span className="text-white">
@@ -123,7 +123,7 @@ export default function ForeCastingMetrics() {
           </Card>
 
           <Card className="bg-blue-700 text-white/80">
-            <CardContent className="text-xs flex items-center justify-between">
+            <CardContent className="text-[10px] sm:text-xs flex flex-col sm:flex-row items-start sm:items-center justify-start sm:justify-between space-y-2 sm:space-y-0">
               <div className="flex items-center gap-1">
                 <Sunrise className="size-[20px]" />-
                 <span className="text-white">
