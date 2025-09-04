@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const baseAPI = import.meta.env.VITE_OPEN_METO_API;
+const mlApi = import.meta.env.VITE_MY_ML_API;
 
 export async function getWeatherData() {
   const res = await axios.get(baseAPI);
@@ -99,5 +100,53 @@ export async function getHistoricalWeatherData() {
       cloudCover: [],
       rain: [],
     };
+  }
+}
+
+export async function makePredictions() {
+  try {
+    // Get the raw weather data to access location and daily data
+    const res = await axios.get(baseAPI);
+    const weatherData = res.data;
+
+    // Extract location and elevation data
+    const stationName = "BUSASAMANA-NYANZA"; // Default station name
+    const lat = weatherData.latitude;
+    const lon = weatherData.longitude;
+    const elev = weatherData.elevation;
+
+    // Get daily forecast data for temperature max/min
+    const dailyData = await getDayForecastedData();
+
+    // Transform the data into the required ML API format
+    const samples = dailyData.time.map((date: Date, index: number) => ({
+      Station_Name: stationName,
+      Lat: lat,
+      Lon: lon,
+      Elev: elev,
+      Year: date.getFullYear(),
+      Month: date.getMonth() + 1, // JavaScript months are 0-indexed
+      Day: date.getDate(),
+      TMPMAX: dailyData.temperature_2m_max[index],
+      TMPMIN: dailyData.temperature_2m_min[index],
+    }));
+
+    // Send the formatted data to the ML API
+    const predictions = await axios.post(mlApi, { samples });
+
+    // @ts-ignore
+    const processData = predictions.data.items.map((data: any, i: number) => {
+      return {
+        date: new Date(data.Year, data.Month - 1, data.Day).toISOString(),
+        TMPMAX: data.TMPMAX,
+        TMPMIN: data.TMPMIN,
+        rain: data.Predicted_Rainfall_mm,
+      };
+    });
+
+    return processData;
+  } catch (error) {
+    console.error("Error making predictions:", error);
+    throw error;
   }
 }

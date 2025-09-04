@@ -2,12 +2,17 @@ import { Card, CardContent, CardTitle } from "../ui/card";
 import { Skeleton } from "../ui/skeleton";
 import WeatherForecast from "./WeatherForecast";
 import { useEffect, useState } from "react";
-import { getHourlyForecastData } from "@/services/weather.api";
+import { makePredictions } from "@/services/weather.api";
+
+interface PredictionData {
+  date: string;
+  TMPMAX: number;
+  TMPMIN: number;
+  rain: number;
+}
 
 interface WeatherData {
   temperature: [number, number][];
-  humidity: [number, number][];
-  cloudCover: [number, number][];
   rain: [number, number][];
   currentTime: number;
 }
@@ -16,8 +21,6 @@ export default function Forecastings() {
   const [loading, setLoading] = useState(true);
   const [weatherData, setWeatherData] = useState<WeatherData>({
     temperature: [],
-    humidity: [],
-    cloudCover: [],
     rain: [],
     currentTime: 0,
   });
@@ -25,8 +28,25 @@ export default function Forecastings() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getHourlyForecastData();
-        setWeatherData(data);
+        const predictionData: PredictionData[] = await makePredictions();
+
+        // Transform prediction data to match WeatherData format
+        const transformedData: WeatherData = {
+          temperature: predictionData.map((item) => [
+            new Date(item.date).getTime(),
+            (item.TMPMAX + item.TMPMIN) / 2, // Average temperature
+          ]),
+
+          rain: predictionData.map((item) => [
+            new Date(item.date).getTime(),
+            item.rain,
+          ]),
+          currentTime: Date.now(),
+        };
+
+        setWeatherData(transformedData);
+      } catch (error) {
+        console.error("Error fetching prediction data:", error);
       } finally {
         setLoading(false);
       }
@@ -38,7 +58,7 @@ export default function Forecastings() {
     <Card>
       <CardTitle>
         <h5 className="px-6 text-xs text-gray-500 font-medium">
-          Future Forecast
+          ML Predictions
         </h5>
       </CardTitle>
       <CardContent className="space-y-5">
@@ -51,7 +71,7 @@ export default function Forecastings() {
             </div>
           </div>
         ) : (
-          <WeatherForecast title="Forecasted data" weatherData={weatherData} />
+          <WeatherForecast title="Predicted data" weatherData={weatherData} />
         )}
       </CardContent>
     </Card>

@@ -4,8 +4,7 @@ import HighchartsReact from "highcharts-react-official";
 
 interface WeatherData {
   temperature: [number, number][];
-  humidity: [number, number][];
-  cloudCover: [number, number][];
+
   rain: [number, number][];
   currentTime: number;
 }
@@ -21,22 +20,22 @@ export default function WeatherForecast({ weatherData }: WeatherForecastProps) {
     unit: string,
     color: string
   ) => ({
-    title: { 
-      text: `${metric} Forecast`,
-      style: { fontSize: '14px' },
-      margin: 15
+    title: {
+      text: `${metric} Prediction`,
+      style: { fontSize: "14px" },
+      margin: 15,
     },
-    subtitle: { 
-      text: "Dotted line indicates forecast",
-      style: { fontSize: '11px' }
+    subtitle: {
+      text: "ML model predictions",
+      style: { fontSize: "11px" },
     },
     chart: {
-      height: '280px',
+      height: "280px",
       spacingBottom: 10,
       spacingTop: 10,
       style: {
-        fontFamily: 'inherit'
-      }
+        fontFamily: "inherit",
+      },
     },
     xAxis: {
       type: "datetime",
@@ -83,18 +82,7 @@ export default function WeatherForecast({ weatherData }: WeatherForecastProps) {
       unit: "°C",
       color: "#fa4fed",
     },
-    {
-      metric: "Humidity",
-      data: weatherData.humidity,
-      unit: "%",
-      color: "#4287f5",
-    },
-    {
-      metric: "Cloud Cover",
-      data: weatherData.cloudCover,
-      unit: "%",
-      color: "#808080",
-    },
+
     {
       metric: "Rain",
       data: weatherData.rain,
@@ -107,7 +95,9 @@ export default function WeatherForecast({ weatherData }: WeatherForecastProps) {
     <div className="space-y-3 sm:space-y-4">
       {charts.map((chart, index) => (
         <div key={index} className="space-y-1">
-          <h6 className="text-[10px] sm:text-xs text-gray-500 px-2">{chart.metric}</h6>
+          <h6 className="text-[10px] sm:text-xs text-gray-500 px-2">
+            {chart.metric}
+          </h6>
           <div className="w-full bg-white rounded-[2px] px-1 sm:px-2">
             <HighchartsReact
               highcharts={Highcharts}
