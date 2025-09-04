@@ -129,6 +129,7 @@ export async function makePredictions() {
       Day: date.getDate(),
       TMPMAX: dailyData.temperature_2m_max[index],
       TMPMIN: dailyData.temperature_2m_min[index],
+      Rainfall_lag1: dailyData.rain_sum[index],
     }));
 
     // Send the formatted data to the ML API
