@@ -140,7 +140,7 @@ export async function makePredictions() {
         date: new Date(data.Year, data.Month - 1, data.Day).toISOString(),
         TMPMAX: data.TMPMAX,
         TMPMIN: data.TMPMIN,
-        rain: data.Predicted_Rainfall_mm,
+        rain: Math.abs(data.Predicted_Rainfall_mm),
       };
     });
 
