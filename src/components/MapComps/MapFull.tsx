@@ -6,24 +6,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 // Mock weather data
 const weatherLocations = [
   {
-    lng: 30.114,
-    lat: -1.939,
+    lng: 30.049381218488325,
+    lat: -1.959099073290557,
     temp: 20,
     condition: "sunny",
   },
-  {
-    lng: 30.130167996461676,
-    lat: -1.9765821361061129,
-    temp: 18,
-    condition: "partly-cloudy",
-  },
-  {
-    lng: 30.0654759788284,
-    lat: -1.9582633318656981,
-    temp: 22,
-    condition: "sunny",
-  },
-  // Add more locations as needed
 ];
 
 // @ts-ignore
@@ -65,8 +52,8 @@ export default function MapFull() {
       style:
         "https://api.maptiler.com/maps/satellite/style.json?key=" +
         import.meta.env.VITE_SATELLITE_MAP,
-      center: [30.114, -1.959],
-      zoom: 12,
+      center: [30.049381218488325, -1.959099073290557],
+      zoom: 9,
     });
 
     map.on("load", async () => {
@@ -93,7 +80,7 @@ export default function MapFull() {
         source: "rwanda-boundaries",
         paint: {
           "fill-color": "#e5e5e5",
-          "fill-opacity": 0.2,
+          "fill-opacity": 0.4,
         },
       });
 
@@ -137,11 +124,8 @@ export default function MapFull() {
 
   return (
     <div className="h-full bg-muted rounded-lg flex items-center justify-center border-2 overflow-hidden border-dashed">
-      {loading ? (
-        <Skeleton className="w-full h-full" />
-      ) : (
-        <div ref={mapContainer} className="w-full h-full" />
-      )}
+      {loading && <Skeleton className="w-full h-full" />}
+      <div ref={mapContainer} className="w-full h-full" />
     </div>
   );
 }

@@ -4,24 +4,11 @@ import { useEffect, useRef } from "react";
 
 const weatherLocations = [
   {
-    lng: 30.114,
-    lat: -1.939,
+    lng: 30.049381218488325,
+    lat: -1.959099073290557,
     temp: 20,
     condition: "sunny",
   },
-  {
-    lng: 30.130167996461676,
-    lat: -1.9765821361061129,
-    temp: 18,
-    condition: "partly-cloudy",
-  },
-  {
-    lng: 30.0654759788284,
-    lat: -1.9582633318656981,
-    temp: 22,
-    condition: "sunny",
-  },
-  // Add more locations as needed
 ];
 
 // @ts-ignore
@@ -63,8 +50,8 @@ export default function MapCurrent() {
       style:
         "https://api.maptiler.com/maps/openstreetmap/style.json?key=" +
         import.meta.env.VITE_BASIC_MAP,
-      center: [30.114, -1.959],
-      zoom: 11,
+      center: [30.049381218488325, -1.959099073290557],
+      zoom: 15,
     });
 
     map.on("load", () => {
