@@ -105,47 +105,59 @@ export async function getHistoricalWeatherData() {
 
 export async function makePredictions() {
   try {
-    // Get the raw weather data to access location and daily data
     const res = await axios.get(baseAPI);
     const weatherData = res.data;
 
-    // Extract location and elevation data
-    const stationName = "BUSASAMANA-NYANZA"; // Default station name
-    const lat = weatherData.latitude;
-    const lon = weatherData.longitude;
-    const elev = weatherData.elevation;
+    const hourlyData = weatherData?.hourly ?? {};
+    const timestamps: string[] = hourlyData.time ?? [];
 
-    // Get daily forecast data for temperature max/min
-    const dailyData = await getDayForecastedData();
+    if (!timestamps.length) {
+      throw new Error("Hourly weather data is unavailable");
+    }
 
-    // Transform the data into the required ML API format
-    const samples = dailyData.time.map((date: Date, index: number) => ({
-      Station_Name: stationName,
-      Lat: lat,
-      Lon: lon,
-      Elev: elev,
-      Year: date.getFullYear(),
-      Month: date.getMonth() + 1, // JavaScript months are 0-indexed
-      Day: date.getDate(),
-      TMPMAX: dailyData.temperature_2m_max[index],
-      TMPMIN: dailyData.temperature_2m_min[index],
-      Rainfall_lag1: dailyData.rain_sum[index],
-    }));
+    const latestIndex = Math.max(0, timestamps.length - 1);
 
-    // Send the formatted data to the ML API
+    const getLatestValue = (
+      metric: number[] | undefined,
+      fallback: number | undefined
+    ) => {
+      const value = metric?.[latestIndex];
+      if (typeof value === "number" && !Number.isNaN(value)) {
+        return value;
+      }
+      return fallback ?? 0;
+    };
+
+    const samples = [
+      {
+        Timestamp: timestamps[latestIndex],
+        previous_rainfall: getLatestValue(hourlyData.rain, 0),
+        previous_pressure: getLatestValue(
+          hourlyData.surface_pressure,
+          weatherData?.current?.pressure_msl
+        ),
+        previous_temperature: getLatestValue(
+          hourlyData.temperature_2m,
+          weatherData?.current?.temperature_2m
+        ),
+        previous_humidity: getLatestValue(
+          hourlyData.relative_humidity_2m,
+          weatherData?.current?.relative_humidity_2m
+        ),
+      },
+    ];
+
     const predictions = await axios.post(mlApi, { samples });
 
-    // @ts-ignore
-    const processData = predictions.data.items.map((data: any, i: number) => {
-      return {
-        date: new Date(data.Year, data.Month - 1, data.Day).toISOString(),
-        TMPMAX: data.TMPMAX,
-        TMPMIN: data.TMPMIN,
-        rain: Math.abs(data.Predicted_Rainfall_mm),
-      };
-    });
+    const processedData = (predictions?.data?.items ?? []).map((item: any) => ({
+      timestamp: item.Timestamp,
+      rainfall: Number(item?.predicted?.rainfall ?? 0),
+      pressure: Number(item?.predicted?.pressure ?? 0),
+      temperature: Number(item?.predicted?.temperature ?? 0),
+      humidity: Number(item?.predicted?.humidity ?? 0),
+    }));
 
-    return processData;
+    return processedData;
   } catch (error) {
     console.error("Error making predictions:", error);
     throw error;

@@ -4,8 +4,9 @@ import HighchartsReact from "highcharts-react-official";
 
 interface WeatherData {
   temperature: [number, number][];
-
-  rain: [number, number][];
+  rainfall: [number, number][];
+  pressure: [number, number][];
+  humidity: [number, number][];
   currentTime: number;
 }
 
@@ -82,12 +83,23 @@ export default function WeatherForecast({ weatherData }: WeatherForecastProps) {
       unit: "°C",
       color: "#fa4fed",
     },
-
     {
-      metric: "Rain",
-      data: weatherData.rain,
+      metric: "Rainfall",
+      data: weatherData.rainfall,
       unit: "mm",
       color: "#41c9f5",
+    },
+    {
+      metric: "Pressure",
+      data: weatherData.pressure,
+      unit: "hPa",
+      color: "#8c54ff",
+    },
+    {
+      metric: "Humidity",
+      data: weatherData.humidity,
+      unit: "%",
+      color: "#00b894",
     },
   ];
 

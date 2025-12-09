@@ -5,15 +5,18 @@ import { useEffect, useState } from "react";
 import { makePredictions } from "@/services/weather.api";
 
 interface PredictionData {
-  date: string;
-  TMPMAX: number;
-  TMPMIN: number;
-  rain: number;
+  timestamp: string;
+  rainfall: number;
+  pressure: number;
+  temperature: number;
+  humidity: number;
 }
 
 interface WeatherData {
   temperature: [number, number][];
-  rain: [number, number][];
+  rainfall: [number, number][];
+  pressure: [number, number][];
+  humidity: [number, number][];
   currentTime: number;
 }
 
@@ -21,7 +24,9 @@ export default function Forecastings() {
   const [loading, setLoading] = useState(true);
   const [weatherData, setWeatherData] = useState<WeatherData>({
     temperature: [],
-    rain: [],
+    rainfall: [],
+    pressure: [],
+    humidity: [],
     currentTime: 0,
   });
 
@@ -33,13 +38,20 @@ export default function Forecastings() {
         // Transform prediction data to match WeatherData format
         const transformedData: WeatherData = {
           temperature: predictionData.map((item) => [
-            new Date(item.date).getTime(),
-            (item.TMPMAX + item.TMPMIN) / 2, // Average temperature
+            new Date(item.timestamp).getTime(),
+            item.temperature,
           ]),
-
-          rain: predictionData.map((item) => [
-            new Date(item.date).getTime(),
-            item.rain,
+          rainfall: predictionData.map((item) => [
+            new Date(item.timestamp).getTime(),
+            item.rainfall,
+          ]),
+          pressure: predictionData.map((item) => [
+            new Date(item.timestamp).getTime(),
+            item.pressure,
+          ]),
+          humidity: predictionData.map((item) => [
+            new Date(item.timestamp).getTime(),
+            item.humidity,
           ]),
           currentTime: Date.now(),
         };
