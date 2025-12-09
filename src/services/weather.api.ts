@@ -105,59 +105,29 @@ export async function getHistoricalWeatherData() {
 
 export async function makePredictions() {
   try {
-    const res = await axios.get(baseAPI);
-    const weatherData = res.data;
+    const response = await axios.get(mlApi);
 
-    const hourlyData = weatherData?.hourly ?? {};
-    const timestamps: string[] = hourlyData.time ?? [];
+    const items: any[] = Array.isArray(response?.data?.items)
+      ? response.data.items
+      : [];
 
-    if (!timestamps.length) {
-      throw new Error("Hourly weather data is unavailable");
-    }
+    const sortedItems = items.sort(
+      (a, b) =>
+        new Date(a?.timestamp ?? 0).getTime() -
+        new Date(b?.timestamp ?? 0).getTime()
+    );
 
-    const latestIndex = Math.max(0, timestamps.length - 1);
-
-    const getLatestValue = (
-      metric: number[] | undefined,
-      fallback: number | undefined
-    ) => {
-      const value = metric?.[latestIndex];
-      if (typeof value === "number" && !Number.isNaN(value)) {
-        return value;
-      }
-      return fallback ?? 0;
-    };
-
-    const samples = [
-      {
-        Timestamp: timestamps[latestIndex],
-        previous_rainfall: getLatestValue(hourlyData.rain, 0),
-        previous_pressure: getLatestValue(
-          hourlyData.surface_pressure,
-          weatherData?.current?.pressure_msl
-        ),
-        previous_temperature: getLatestValue(
-          hourlyData.temperature_2m,
-          weatherData?.current?.temperature_2m
-        ),
-        previous_humidity: getLatestValue(
-          hourlyData.relative_humidity_2m,
-          weatherData?.current?.relative_humidity_2m
-        ),
-      },
-    ];
-
-    const predictions = await axios.post(mlApi, { samples });
-
-    const processedData = (predictions?.data?.items ?? []).map((item: any) => ({
-      timestamp: item.Timestamp,
-      rainfall: Number(item?.predicted?.rainfall ?? 0),
-      pressure: Number(item?.predicted?.pressure ?? 0),
-      temperature: Number(item?.predicted?.temperature ?? 0),
-      humidity: Number(item?.predicted?.humidity ?? 0),
+    return sortedItems.map((item: any) => ({
+      id: item?._id ?? "",
+      requestId: item?.request_id ?? "",
+      label: item?.label ?? "",
+      sequence: Number(item?.sequence ?? 0),
+      timestamp: item?.timestamp ?? "",
+      rainfall: Number(item?.values?.rainfall ?? 0),
+      pressure: Number(item?.values?.pressure ?? 0),
+      temperature: Number(item?.values?.temperature ?? 0),
+      humidity: Number(item?.values?.humidity ?? 0),
     }));
-
-    return processedData;
   } catch (error) {
     console.error("Error making predictions:", error);
     throw error;
