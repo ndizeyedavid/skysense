@@ -40,6 +40,15 @@ export default function WeatherForecast({ weatherData }: WeatherForecastProps) {
     },
     xAxis: {
       type: "datetime",
+      dateTimeLabelFormats: {
+        second: "%I:%M %p",
+        minute: "%I:%M %p",
+        hour: "%I:%M %p",
+        day: "%e %b",
+        week: "%e %b",
+        month: "%b '%y",
+        year: "%Y",
+      },
       plotLines: [
         {
           color: "#4840d6",
@@ -61,6 +70,7 @@ export default function WeatherForecast({ weatherData }: WeatherForecastProps) {
     tooltip: {
       valueSuffix: unit,
       valueDecimals: 2,
+      xDateFormat: "%A, %b %e, %I:%M %p",
     },
     series: [
       {

@@ -36,22 +36,27 @@ export default function Forecastings() {
         const predictionData: PredictionData[] = await makePredictions();
 
         // Transform prediction data to match WeatherData format
+        const now = Date.now();
+        const timeline = predictionData.map(
+          (_, index) => now + index * 3 * 60 * 60 * 1000
+        );
+
         const transformedData: WeatherData = {
-          temperature: predictionData.map((item) => [
-            new Date(item.timestamp).getTime(),
-            item.temperature,
+          temperature: timeline.map((time, index) => [
+            time,
+            predictionData[index].temperature,
           ]),
-          rainfall: predictionData.map((item) => [
-            new Date(item.timestamp).getTime(),
-            item.rainfall,
+          rainfall: timeline.map((time, index) => [
+            time,
+            predictionData[index].rainfall,
           ]),
-          pressure: predictionData.map((item) => [
-            new Date(item.timestamp).getTime(),
-            item.pressure,
+          pressure: timeline.map((time, index) => [
+            time,
+            predictionData[index].pressure,
           ]),
-          humidity: predictionData.map((item) => [
-            new Date(item.timestamp).getTime(),
-            item.humidity,
+          humidity: timeline.map((time, index) => [
+            time,
+            predictionData[index].humidity,
           ]),
           currentTime: Date.now(),
         };
