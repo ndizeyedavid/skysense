@@ -58,7 +58,10 @@ export default function WeatherForecast({ weatherData }: WeatherForecastProps) {
     },
     yAxis: { title: { text: unit } },
     legend: { enabled: false },
-    tooltip: { valueSuffix: unit },
+    tooltip: {
+      valueSuffix: unit,
+      valueDecimals: 2,
+    },
     series: [
       {
         name: metric,

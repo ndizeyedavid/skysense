@@ -117,7 +117,9 @@ export async function makePredictions() {
         new Date(b?.timestamp ?? 0).getTime()
     );
 
-    return sortedItems.map((item: any) => ({
+    const lastEightItems = sortedItems.slice(-7);
+
+    return lastEightItems.map((item: any) => ({
       id: item?._id ?? "",
       requestId: item?.request_id ?? "",
       label: item?.label ?? "",
