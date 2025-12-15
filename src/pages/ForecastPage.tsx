@@ -1,4 +1,4 @@
-import CurrentMapView from "@/components/CurrentMapView";
+// import CurrentMapView from "@/components/CurrentMapView";
 import ForeCastingMetrics from "@/components/Forecastings/ForeCastingMetrics";
 import Forecastings from "@/components/Forecastings/Forecastings";
 import Header from "@/components/Header";
@@ -11,7 +11,7 @@ export default function ForecastPage() {
         <Forecastings />
 
         <div className="space-y-3 sm:space-y-4">
-          <CurrentMapView />
+          {/* <CurrentMapView /> */}
 
           <ForeCastingMetrics />
         </div>

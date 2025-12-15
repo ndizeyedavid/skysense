@@ -48,7 +48,7 @@ export default function Forecastings() {
           ]),
           rainfall: timeline.map((time, index) => [
             time,
-            predictionData[index].rainfall,
+            Math.abs(predictionData[index].rainfall),
           ]),
           pressure: timeline.map((time, index) => [
             time,
