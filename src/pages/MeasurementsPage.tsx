@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getAllMeasurements } from "@/services/weather.api";
-import { Download, Search, ArrowUp, ArrowDown } from "lucide-react";
+import { Download, Search } from "lucide-react";
 
 interface MeasurementItem {
   id: string;
@@ -24,12 +24,11 @@ export default function MeasurementsPage() {
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<MeasurementItem[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [sortConfig, setSortConfig] = useState<{
-    key: keyof MeasurementItem;
-    direction: "asc" | "desc";
-  } | null>(null);
+  const [sortColumn, setSortColumn] =
+    useState<keyof MeasurementItem>("timestamp");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
+  const [filterLabel, setFilterLabel] = useState<string>("all");
+  const [fetchLimit, setFetchLimit] = useState<string>("100");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,18 +55,6 @@ export default function MeasurementsPage() {
     fetchData();
   }, []);
 
-  const handleSort = (key: keyof MeasurementItem) => {
-    let direction: "asc" | "desc" = "asc";
-    if (
-      sortConfig &&
-      sortConfig.key === key &&
-      sortConfig.direction === "asc"
-    ) {
-      direction = "desc";
-    }
-    setSortConfig({ key, direction });
-  };
-
   const filteredAndSortedData = useMemo(() => {
     let result = [...data];
 
@@ -80,28 +67,26 @@ export default function MeasurementsPage() {
       );
     }
 
-    if (startDate || endDate) {
-      result = result.filter((item) => {
-        const itemDate = new Date(item.timestamp);
-        if (startDate && itemDate < new Date(startDate)) return false;
-        if (endDate && itemDate > new Date(endDate + "T23:59:59")) return false;
-        return true;
-      });
+    if (filterLabel !== "all") {
+      result = result.filter((item) => item.label === filterLabel);
     }
 
-    if (sortConfig) {
-      result.sort((a, b) => {
-        const aVal = a[sortConfig.key];
-        const bVal = b[sortConfig.key];
-
-        if (aVal < bVal) return sortConfig.direction === "asc" ? -1 : 1;
-        if (aVal > bVal) return sortConfig.direction === "asc" ? 1 : -1;
-        return 0;
-      });
+    if (fetchLimit !== "all") {
+      const limit = parseInt(fetchLimit, 10);
+      result = result.slice(0, limit);
     }
+
+    result.sort((a, b) => {
+      const aVal = a[sortColumn];
+      const bVal = b[sortColumn];
+
+      if (aVal < bVal) return sortDirection === "asc" ? -1 : 1;
+      if (aVal > bVal) return sortDirection === "asc" ? 1 : -1;
+      return 0;
+    });
 
     return result;
-  }, [data, searchQuery, startDate, endDate, sortConfig]);
+  }, [data, searchQuery, sortColumn, sortDirection, filterLabel, fetchLimit]);
 
   const exportToCSV = () => {
     const headers = [
@@ -257,8 +242,11 @@ export default function MeasurementsPage() {
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="md:col-span-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div className="lg:col-span-2">
+              <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">
+                Search
+              </label>
               <div className="relative">
                 <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
                 <input
@@ -272,24 +260,73 @@ export default function MeasurementsPage() {
                 />
               </div>
             </div>
-            <input
-              type="date"
-              placeholder="Start date"
-              value={startDate}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setStartDate(e.target.value)
-              }
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
-            />
-            <input
-              type="date"
-              placeholder="End date"
-              value={endDate}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setEndDate(e.target.value)
-              }
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
-            />
+
+            <div>
+              <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">
+                Sort By
+              </label>
+              <select
+                value={sortColumn}
+                onChange={(e) =>
+                  setSortColumn(e.target.value as keyof MeasurementItem)
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+              >
+                <option value="timestamp">Timestamp</option>
+                <option value="temperature">Temperature</option>
+                <option value="humidity">Humidity</option>
+                <option value="pressure">Pressure</option>
+                <option value="rainfall">Rainfall</option>
+                <option value="label">Label</option>
+                <option value="source">Source</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">
+                Direction
+              </label>
+              <select
+                value={sortDirection}
+                onChange={(e) =>
+                  setSortDirection(e.target.value as "asc" | "desc")
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+              >
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">
+                Filter Type
+              </label>
+              <select
+                value={filterLabel}
+                onChange={(e) => setFilterLabel(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+              >
+                <option value="all">All</option>
+                <option value="real">Real</option>
+                <option value="predicted">Predicted</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">
+                Show
+              </label>
+              <select
+                value={fetchLimit}
+                onChange={(e) => setFetchLimit(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+              >
+                <option value="100">Last 100</option>
+                <option value="500">Last 500</option>
+                <option value="all">All</option>
+              </select>
+            </div>
           </div>
 
           <div className="overflow-x-auto">
@@ -307,20 +344,9 @@ export default function MeasurementsPage() {
                   ].map((col) => (
                     <th
                       key={col.key}
-                      className="text-left py-3 px-2 font-medium cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
-                      onClick={() =>
-                        handleSort(col.key as keyof MeasurementItem)
-                      }
+                      className="text-left py-3 px-2 font-medium"
                     >
-                      <div className="flex items-center gap-1">
-                        {col.label}
-                        {sortConfig?.key === col.key &&
-                          (sortConfig.direction === "asc" ? (
-                            <ArrowUp className="h-3 w-3" />
-                          ) : (
-                            <ArrowDown className="h-3 w-3" />
-                          ))}
-                      </div>
+                      <div className="flex items-center gap-1">{col.label}</div>
                     </th>
                   ))}
                 </tr>
