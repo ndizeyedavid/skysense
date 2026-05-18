@@ -2,6 +2,7 @@ import axios from "axios";
 
 const baseAPI = import.meta.env.VITE_OPEN_METO_API;
 const mlApi = import.meta.env.VITE_MY_ML_API;
+const backendAPI = import.meta.env.VITE_BACKEND_API;
 
 export async function getWeatherData() {
   const res = await axios.get(baseAPI);
@@ -114,7 +115,7 @@ export async function makePredictions() {
     const sortedItems = items.sort(
       (a, b) =>
         new Date(a?.timestamp ?? 0).getTime() -
-        new Date(b?.timestamp ?? 0).getTime()
+        new Date(b?.timestamp ?? 0).getTime(),
     );
 
     const lastEightItems = sortedItems.slice(-7);
@@ -138,7 +139,7 @@ export async function makePredictions() {
 
 export async function getLatestMeasurements() {
   try {
-    const response = await axios.get(`${mlApi}/measurements/latest`);
+    const response = await axios.get(`${backendAPI}/measurements/latest`);
     return response.data;
   } catch (error) {
     console.error("Error fetching latest measurements:", error);
