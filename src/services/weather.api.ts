@@ -146,3 +146,13 @@ export async function getLatestMeasurements() {
     throw error;
   }
 }
+
+export async function getAllMeasurements() {
+  try {
+    const response = await axios.get(`${backendAPI}/measurements`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching all measurements:", error);
+    throw error;
+  }
+}

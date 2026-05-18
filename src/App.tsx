@@ -3,6 +3,7 @@ import TodayPage from "./pages/TodayPage";
 import ForecastPage from "./pages/ForecastPage";
 import HistoryPage from "./pages/HistoryPage";
 import MapPage from "./pages/MapPage";
+import MeasurementsPage from "./pages/MeasurementsPage";
 import { Sampling } from "./pages/Sampling";
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
           <Route path="/forecast" element={<ForecastPage />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/map" element={<MapPage />} />
+          <Route path="/measurements" element={<MeasurementsPage />} />
           <Route path="/test" element={<Sampling />} />
         </Routes>
       </BrowserRouter>

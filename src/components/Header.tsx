@@ -31,10 +31,21 @@ export default function Header() {
             variant="outline"
             className={cn(
               "text-xs sm:text-sm px-2.5 sm:px-4 h-8 sm:h-10 nav-button",
-              location.pathname === "/" && "nav-button-active"
+              location.pathname === "/" && "nav-button-active",
             )}
           >
             Today
+          </Button>
+        </NavLink>
+        <NavLink to="/measurements">
+          <Button
+            variant="outline"
+            className={cn(
+              "text-xs sm:text-sm px-2.5 sm:px-4 h-8 sm:h-10 nav-button",
+              location.pathname === "/measurements" && "nav-button-active",
+            )}
+          >
+            Measurements
           </Button>
         </NavLink>
         <NavLink to="/forecast">
@@ -42,7 +53,7 @@ export default function Header() {
             variant="outline"
             className={cn(
               "text-xs sm:text-sm px-2.5 sm:px-4 h-8 sm:h-10 nav-button",
-              location.pathname === "/forecast" && "nav-button-active"
+              location.pathname === "/forecast" && "nav-button-active",
             )}
           >
             Forecast
@@ -53,7 +64,7 @@ export default function Header() {
             variant="outline"
             className={cn(
               "text-xs sm:text-sm px-2.5 sm:px-4 h-8 sm:h-10 nav-button",
-              location.pathname === "/history" && "nav-button-active"
+              location.pathname === "/history" && "nav-button-active",
             )}
           >
             History
@@ -64,7 +75,7 @@ export default function Header() {
             variant="outline"
             className={cn(
               "text-xs sm:text-sm px-2.5 sm:px-4 h-8 sm:h-10 nav-button",
-              location.pathname === "/map" && "nav-button-active"
+              location.pathname === "/map" && "nav-button-active",
             )}
           >
             Map
