@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import WeatherCard from "@/components/WeatherCard";
-import { getCurrentWeather } from "@/services/weather.api";
+import { getCurrentWeather, getLatestMeasurements } from "@/services/weather.api";
 import type { IWeatherCard } from "@/types/weatherCard";
 import {
   AlignVerticalJustifyCenterIcon,
@@ -23,19 +23,34 @@ import { useEffect, useState } from "react";
 export default function TodayPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [currentWeatherData, setCurrentWeatherData] = useState<any>({});
+  const [latestMeasurements, setLatestMeasurements] = useState<any>(null);
+  
   useEffect(() => {
     (async () => {
       try {
-        const res = await getCurrentWeather();
+        const [weatherRes, measurementsRes] = await Promise.all([
+          getCurrentWeather(),
+          getLatestMeasurements().catch(() => null)
+        ]);
 
-        console.log(res);
-        setCurrentWeatherData(res);
+        console.log("Weather data:", weatherRes);
+        console.log("Measurements data:", measurementsRes);
+        
+        setCurrentWeatherData(weatherRes);
+        setLatestMeasurements(measurementsRes);
         setLoading(false);
       } catch (err) {
         console.error(err);
+        setLoading(false);
       }
     })();
   }, []);
+
+  const getValue = (openMeteoValue: any, measurementValue: any) => {
+    return measurementValue !== null && measurementValue !== undefined 
+      ? measurementValue 
+      : openMeteoValue;
+  };
 
   const weatherData: IWeatherCard[] = [
     {
@@ -47,14 +62,14 @@ export default function TodayPage() {
     },
     {
       title: "Heat Index",
-      value: `${currentWeatherData?.temperature_2m}°`,
+      value: `${getValue(currentWeatherData?.temperature_2m, latestMeasurements?.values?.temperature)}°`,
       desc: "Heat relative to % Humidity",
       icon: "heat",
       background: "/assets/images/heat.png",
     },
     {
       title: "Sea level Pressure",
-      value: `${currentWeatherData?.pressure_msl} hPa`,
+      value: `${getValue(currentWeatherData?.pressure_msl, latestMeasurements?.values?.pressure)} hPa`,
       desc: "",
       icon: "visibility",
       background: "/assets/images/visibility.png",
@@ -88,12 +103,12 @@ export default function TodayPage() {
         ) : (
           <>
             <CurrentWeather
-              temperature={currentWeatherData?.temperature_2m}
+              temperature={getValue(currentWeatherData?.temperature_2m, latestMeasurements?.values?.temperature)}
               apparentTemp={currentWeatherData?.apparent_temperature}
-              precipitation={currentWeatherData?.precipitation}
+              precipitation={getValue(currentWeatherData?.precipitation, latestMeasurements?.values?.rainfall)}
               highTemp={currentWeatherData?.temperature_2m_max}
               lowTemp={currentWeatherData?.temperature_2m_min}
-              rain={currentWeatherData?.rain}
+              rain={getValue(currentWeatherData?.rain, latestMeasurements?.values?.rainfall)}
               maxPrecipitation={
                 currentWeatherData?.precipitation_probability_max
               }
@@ -191,8 +206,8 @@ export default function TodayPage() {
 
             <WeatherCard
               title="Relative Humidity"
-              value={`${currentWeatherData?.relative_humidity_2m}%`}
-              desc={`The dew point is currently ${currentWeatherData?.precipitation}°`}
+              value={`${getValue(currentWeatherData?.relative_humidity_2m, latestMeasurements?.values?.humidity)}%`}
+              desc={`The dew point is currently ${getValue(currentWeatherData?.precipitation, latestMeasurements?.values?.rainfall)}°`}
               icon="humidity"
               background="/assets/images/humidity.png"
             />
@@ -209,8 +224,8 @@ export default function TodayPage() {
 
               <CardContent className="flex items-center justify-center">
                 <CircularProgressBar
-                  progress={(currentWeatherData?.temperature_2m / 35) * 100}
-                  text={currentWeatherData?.temperature_2m}
+                  progress={(getValue(currentWeatherData?.temperature_2m, latestMeasurements?.values?.temperature) / 35) * 100}
+                  text={getValue(currentWeatherData?.temperature_2m, latestMeasurements?.values?.temperature)}
                 />
               </CardContent>
 
@@ -231,8 +246,8 @@ export default function TodayPage() {
 
               <CardContent className="flex items-center justify-center">
                 <CircularProgressBar
-                  progress={(currentWeatherData?.surface_pressure / 1026) * 100}
-                  text={`${currentWeatherData?.surface_pressure}`}
+                  progress={(getValue(currentWeatherData?.surface_pressure, latestMeasurements?.values?.pressure) / 1026) * 100}
+                  text={`${getValue(currentWeatherData?.surface_pressure, latestMeasurements?.values?.pressure)}`}
                 />
               </CardContent>
 

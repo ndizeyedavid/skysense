@@ -135,3 +135,13 @@ export async function makePredictions() {
     throw error;
   }
 }
+
+export async function getLatestMeasurements() {
+  try {
+    const response = await axios.get(`${mlApi}/measurements/latest`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching latest measurements:", error);
+    throw error;
+  }
+}
