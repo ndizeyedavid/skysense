@@ -6,8 +6,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 // Mock weather data
 const weatherLocations = [
   {
-    lng: 29.7464,
-    lat: -2.3737,
+    lng: -1.4596,
+    lat: 29.612,
     temp: 20,
     condition: "sunny",
   },
@@ -98,7 +98,7 @@ export default function MapFull() {
       weatherLocations.forEach((location) => {
         const markerElement = createWeatherMarkerElement(
           location.temp,
-          location.condition
+          location.condition,
         );
 
         new maplibregl.Marker({ element: markerElement })
@@ -112,8 +112,8 @@ export default function MapFull() {
                 <strong style="font-size: 16px;">${location.temp}°C</strong>
                 <br/>
                 <span style="color: #666;">${location.condition}</span>
-              </div>`
-            )
+              </div>`,
+            ),
           )
           .addTo(map);
       });

@@ -50,7 +50,7 @@ export default function MapCurrent() {
       style:
         "https://api.maptiler.com/maps/openstreetmap/style.json?key=" +
         import.meta.env.VITE_BASIC_MAP,
-      center: [29.7464, -2.3737],
+      center: [-1.4596, 29.612],
       zoom: 11,
     });
 
@@ -95,7 +95,7 @@ export default function MapCurrent() {
       weatherLocations.forEach((location) => {
         const markerElement = createWeatherMarkerElement(
           location.temp,
-          location.condition
+          location.condition,
         );
 
         new maplibregl.Marker({ element: markerElement })
@@ -113,8 +113,8 @@ export default function MapCurrent() {
                 <span style="color: #666; font-size: ${
                   window.innerWidth < 640 ? "12px" : "14px"
                 };">${location.condition}</span>
-              </div>`
-            )
+              </div>`,
+            ),
           )
           .addTo(map);
       });
