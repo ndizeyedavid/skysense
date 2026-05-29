@@ -4,8 +4,8 @@ import { useEffect, useRef } from "react";
 
 const weatherLocations = [
   {
-    lng: 29.7464,
-    lat: -2.3737,
+    lng: 29.58319850919815,
+    lat: -1.4503403883509247,
     temp: 20,
     condition: "sunny",
   },
@@ -50,7 +50,7 @@ export default function MapCurrent() {
       style:
         "https://api.maptiler.com/maps/openstreetmap/style.json?key=" +
         import.meta.env.VITE_BASIC_MAP,
-      center: [-1.4596, 29.612],
+      center: [29.58319850919815, -1.4503403883509247],
       zoom: 11,
     });
 

@@ -6,8 +6,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 // Mock weather data
 const weatherLocations = [
   {
-    lng: -1.4596,
-    lat: 29.612,
+    lng: 29.58319850919815,
+    lat: -1.4503403883509247,
     temp: 20,
     condition: "sunny",
   },
@@ -52,7 +52,7 @@ export default function MapFull() {
       style:
         "https://api.maptiler.com/maps/satellite/style.json?key=" +
         import.meta.env.VITE_SATELLITE_MAP,
-      center: [29.7464, -2.3737],
+      center: [29.58319850919815, -1.4503403883509247],
       zoom: 9,
     });
 
