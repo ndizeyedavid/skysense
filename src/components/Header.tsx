@@ -48,7 +48,7 @@ export default function Header() {
             Measurements
           </Button>
         </NavLink>
-        <NavLink to="/forecast">
+        {/* <NavLink to="/forecast">
           <Button
             variant="outline"
             className={cn(
@@ -80,7 +80,7 @@ export default function Header() {
           >
             Map
           </Button>
-        </NavLink>
+        </NavLink> */}
       </div>
 
       {/* Profile */}
