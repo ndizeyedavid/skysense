@@ -164,7 +164,7 @@ export default function MeasurementsPage() {
               .map(
                 (item) => `
               <tr>
-                <td>${item.timestamp}</td>
+                <td>${new Date(item.timestamp).toLocaleDateString()}</td>
                 <td>${item.temperature}</td>
                 <td>${item.humidity}</td>
                 <td>${item.pressure}</td>
