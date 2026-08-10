@@ -50,7 +50,7 @@ export default function MapCurrent() {
       style:
         "https://api.maptiler.com/maps/openstreetmap/style.json?key=" +
         import.meta.env.VITE_BASIC_MAP,
-      center: [29.58319850919815, -1.4503403883509247],
+      center: [29.74934277230309, -2.357293140781161],
       zoom: 11,
     });
 
