@@ -4,8 +4,8 @@ import { useEffect, useRef } from "react";
 
 const weatherLocations = [
   {
-    lng: 29.58319850919815,
-    lat: -1.4503403883509247,
+    lng: 29.74934277230309,
+    lat: -2.357293140781161,
     temp: 20,
     condition: "sunny",
   },
